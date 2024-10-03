@@ -48,9 +48,9 @@ class ProxyRotator:
                 if response.status_code == 200:
                     return response.text
                 else:
-                    print(f"{url}, {response.status_code}")
+                    print(f"{url} {response.status_code}")
             except Exception as error:
-                print(f"{url}, {error}")
+                print(f"{url} {error}")
                 self._remove_proxy()
         raise Exception("No proxies left")
 
@@ -93,7 +93,7 @@ def main() -> None:
     proxies = get_proxies(username, password)
     proxy_rotator = ProxyRotator(proxies)
     asins = asin_generator()
-    num_workers = 10
+    num_workers = 20
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         for asin in asins:
             executor.submit(scrape_amazon_product, proxy_rotator, asin)
