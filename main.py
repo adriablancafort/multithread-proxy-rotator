@@ -90,12 +90,8 @@ def main() -> None:
     asins = asin_generator()
     num_workers = 10
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
-        while True:
-            try:
-                asin = next(asins)
-                executor.submit(scrape_amazon_product, proxy_rotator, asin)
-            except StopIteration:
-                break
+        for asin in asins:
+            executor.submit(scrape_amazon_product, proxy_rotator, asin)
 
 if __name__ == "__main__":
     main()
