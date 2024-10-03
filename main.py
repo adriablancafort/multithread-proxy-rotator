@@ -1,4 +1,4 @@
-from database import get_proxies, asin_generator, store_product
+from database import get_proxies, amazon_asin_generator, store_product
 from proxy_rotator import ProxyRotator
 from selectolax.parser import HTMLParser
 from dotenv import load_dotenv
@@ -43,7 +43,7 @@ def main() -> None:
     password = getenv("PROXY_PASSWORD")
     proxies = get_proxies(username, password)
     proxy_rotator = ProxyRotator(proxies)
-    asins = asin_generator()
+    asins = amazon_asin_generator()
     num_workers = 20
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         for asin in asins:
