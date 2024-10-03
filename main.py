@@ -6,7 +6,7 @@ from os import getenv
 
 
 def get_proxies(username: str, password: str) -> list[str]:
-    """Get a list of proxies."""
+    """Return the list of proxies."""
     with open("proxies.txt", "r") as file:
         return [f"http://{username}:{password}@{line.strip()}" for line in file]
 
@@ -19,7 +19,7 @@ def asin_generator():
 
 
 def store_product(product: str) -> None:
-    """Store product in a file."""
+    """Store the product in a file."""
     with open("output.txt", "a") as file:
         file.write(f"{product}\n")
 
@@ -38,6 +38,7 @@ class ProxyRotator:
         del self.sessions[self.current_index]
 
     def get_content(self, url: str) -> str:
+        """Get the content of the given URL through a proxy."""
         while self.proxies:
             self._rotate_proxy()
             proxy = self.proxies[self.current_index]
@@ -53,7 +54,9 @@ class ProxyRotator:
                 self._remove_proxy()
         raise Exception("No proxies left")
 
+
 def parse_amazon_product(html: str) -> str:
+    """Given the HTML, return the product information."""
     tree = HTMLParser(html)
 
     title_element = tree.css_first("h1 span")
@@ -70,10 +73,12 @@ def parse_amazon_product(html: str) -> str:
 
 
 def scrape_amazon_product(proxy_rotator: ProxyRotator, asin: str) -> None:
+    """Given an ASIN, scrape and save the product information."""
     url = f"https://www.amazon.com/dp/{asin}"
     while True:
         html = proxy_rotator.get_content(url)
         if "Enter the characters you see below" not in html:
+            print(f"{url} Success")
             break
         else:
             print(f"{url} CAPTCHA")
@@ -92,6 +97,7 @@ def main() -> None:
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         for asin in asins:
             executor.submit(scrape_amazon_product, proxy_rotator, asin)
+
 
 if __name__ == "__main__":
     main()
