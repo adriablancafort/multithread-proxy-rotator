@@ -1,7 +1,7 @@
-def get_proxies(username: str, password: str) -> list[str]:
+def get_proxies() -> list[str]:
     """Return the list of proxies."""
     with open("proxies.txt", "r") as file:
-        return [f"http://{username}:{password}@{line.strip()}" for line in file]
+        return [f"http://{line.strip()}" for line in file]
 
 
 def store_product(product: str) -> None:

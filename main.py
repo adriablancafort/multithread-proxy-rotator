@@ -3,7 +3,6 @@ from proxy_rotator import ProxyRotator
 from selectolax.parser import HTMLParser
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
-from os import getenv
 
 
 def parse_amazon_product(html: str) -> str:
@@ -38,13 +37,10 @@ def scrape_amazon_product(proxy_rotator: ProxyRotator, asin: str) -> None:
 
 
 def main() -> None:
-    load_dotenv()
-    username = getenv("PROXY_USERNAME")
-    password = getenv("PROXY_PASSWORD")
-    proxies = get_proxies(username, password)
+    proxies = get_proxies()
     proxy_rotator = ProxyRotator(proxies)
     asins = amazon_asin_generator()
-    num_workers = 20
+    num_workers = 50
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         for asin in asins:
             executor.submit(scrape_amazon_product, proxy_rotator, asin)
