@@ -1,7 +1,6 @@
 from database import get_proxies, amazon_asin_generator, store_product
 from proxy_rotator import ProxyRotator
 from selectolax.parser import HTMLParser
-from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
 
 
