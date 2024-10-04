@@ -21,7 +21,7 @@ class ProxyRotator:
             proxy = self.proxies[self.current_index]
             session = self.sessions[self.current_index]
             try:
-                response = session.get(url, impersonate="safari", proxy=proxy)
+                response = session.get(url, impersonate="safari", proxy=proxy, timeout=3000)
                 if response.status_code == 200:
                     return response.text
                 else:
